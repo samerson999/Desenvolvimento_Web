@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar"
+import ClientOnly from "./components/ClientOnly";
+import Modal from "./components/modals/Modal";
+import RegisterModal from "./components/modals/RegisterModal";
+import ToasterProvider from "./providers/ToasterProvider";
 
 const font = Nunito({
   variable: "--font-nunito",
@@ -22,7 +26,11 @@ export default function RootLayout({
     <html lang="pt-br">
       <body
         className={`${font.variable} antialiased`}>
-          <Navbar/>
+          <ClientOnly>
+            <ToasterProvider/>
+            <RegisterModal/>
+            <Navbar/>
+          </ClientOnly>
         {children}
       </body>
     </html>

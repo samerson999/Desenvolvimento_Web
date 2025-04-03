@@ -9,7 +9,7 @@ const Navbar = () => {
     return(
         <div className="fixed w-full g-white z-10 shadow-sm">
             <div
-                className="py-1 border-[1px]"
+                className="py-4 border-[1px]"
             >
                 <Container>
                     <div

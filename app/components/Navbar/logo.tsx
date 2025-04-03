@@ -9,7 +9,7 @@ const Logo = () => {
     return(
         <Image
             alt="Logo"
-            className='sm:w-25 cursor-pointer ml-5'
+            className='sm:w-16 cursor-pointer ml-5'
             height="100"
             width="100"
             src="/images/logo.png"
