@@ -5,9 +5,20 @@ import Avatar from '../Avatar';
 import { useCallback, useReducer, useState } from 'react';
 import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/userRegisterModal';
+import useLoginModal from '@/app/hooks/userLoginModal';
+import { User } from '@prisma/client';
+import { signOut } from 'next-auth/react';
 
-const UserMenu = () => {
+interface UserMenuProps{
+    currentUser?: User | null
+}
+
+
+const UserMenu: React.FC<UserMenuProps> = ({
+    currentUser
+}) => {
     const registerModal = useRegisterModal();
+    const loginModal = useLoginModal()
     const [isOpen, setIsOpen] = useState(false);
     const toggleOpen = useCallback(() => {
       setIsOpen((value) => !value);  
@@ -73,9 +84,25 @@ const UserMenu = () => {
                     '
                 >
                     <div className='flex flex-col cursor-pointer'>
+                        {currentUser ? (
+                            <>
+                            <MenuItem 
+                             onClick={() => {}}
+                             label="Minhas Reservas"
+                            />
+                            <MenuItem 
+                             onClick={() => {}}
+                             label="Meus Favoritos"
+                            />
+                            <MenuItem 
+                             onClick={() => signOut()}
+                             label="Sair da Conta"
+                            />
+                            </>
+                        ) : (
                        <>
                        <MenuItem 
-                        onClick={() => {}}
+                        onClick={loginModal.onOpen}
                         label="Entrar"
                        />
                        <MenuItem 
@@ -84,6 +111,7 @@ const UserMenu = () => {
                        />
                        
                        </> 
+                       )}
                     </div>
 
                 </div>
