@@ -1,33 +1,32 @@
-'use client';
+"use client";
 
-import { AiOutlineMenu } from 'react-icons/ai'
-import Avatar from '../Avatar';
-import { useCallback, useReducer, useState } from 'react';
-import MenuItem from './MenuItem';
-import useRegisterModal from '@/app/hooks/userRegisterModal';
-import useLoginModal from '@/app/hooks/userLoginModal';
-import { User } from '@prisma/client';
-import { signOut } from 'next-auth/react';
+import { AiOutlineMenu } from "react-icons/ai";
+import Avatar from "../Avatar";
+import { useCallback, useReducer, useState } from "react";
+import MenuItem from "./MenuItem";
+import useRegisterModal from "@/app/hooks/userRegisterModal";
+import useLoginModal from "@/app/hooks/userLoginModal";
+import { User } from "@prisma/client";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 
-interface UserMenuProps{
-    currentUser?: User | null
+interface UserMenuProps {
+    currentUser?: User | null;
 }
 
-
-const UserMenu: React.FC<UserMenuProps> = ({
-    currentUser
-}) => {
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     const registerModal = useRegisterModal();
-    const loginModal = useLoginModal()
+    const loginModal = useLoginModal();
     const [isOpen, setIsOpen] = useState(false);
     const toggleOpen = useCallback(() => {
-      setIsOpen((value) => !value);  
+        setIsOpen((value) => !value);
     }, []);
 
-    return ( 
+    return (
         <div className="relative">
             <div className="flex flex-row items-center gap-3">
-                <div
+                <Link
+                    href="/advertisePage"
                     onClick={() => {}}
                     className="
                         hidden
@@ -43,7 +42,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     "
                 >
                     Anuncie seu Espaço
-                </div>
+                </Link>
                 <div
                     onClick={toggleOpen}
                     className="
@@ -62,15 +61,15 @@ const UserMenu: React.FC<UserMenuProps> = ({
                         transition
                     "
                 >
-                    <AiOutlineMenu/>
-                    <div className='hidden md:block'>
-                        <Avatar/>
-                    </div>  
+                    <AiOutlineMenu />
+                    <div className="hidden md:block">
+                        <Avatar />
+                    </div>
                 </div>
             </div>
             {isOpen && (
                 <div
-                    className='
+                    className="
                         absolute
                         rounded-xl
                         shadow-md
@@ -81,43 +80,26 @@ const UserMenu: React.FC<UserMenuProps> = ({
                         right-0
                         top-12
                         text-sm
-                    '
+                    "
                 >
-                    <div className='flex flex-col cursor-pointer'>
+                    <div className="flex flex-col cursor-pointer">
                         {currentUser ? (
                             <>
-                            <MenuItem 
-                             onClick={() => {}}
-                             label="Minhas Reservas"
-                            />
-                            <MenuItem 
-                             onClick={() => {}}
-                             label="Meus Favoritos"
-                            />
-                            <MenuItem 
-                             onClick={() => signOut()}
-                             label="Sair da Conta"
-                            />
+                                <MenuItem onClick={() => {}} label="Minhas Reservas" />
+                                <MenuItem onClick={() => {}} label="Meus Favoritos" />
+                                <MenuItem onClick={() => signOut()} label="Sair da Conta" />
                             </>
                         ) : (
-                       <>
-                       <MenuItem 
-                        onClick={loginModal.onOpen}
-                        label="Entrar"
-                       />
-                       <MenuItem 
-                        onClick={registerModal.onOpen}
-                        label="Cadastrar"
-                       />
-                       
-                       </> 
-                       )}
+                            <>
+                                <MenuItem onClick={loginModal.onOpen} label="Entrar" />
+                                <MenuItem onClick={registerModal.onOpen} label="Cadastrar" />
+                            </>
+                        )}
                     </div>
-
                 </div>
             )}
         </div>
-     );
-}
- 
+    );
+};
+
 export default UserMenu;
