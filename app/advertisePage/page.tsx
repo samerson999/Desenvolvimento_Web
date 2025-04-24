@@ -1,19 +1,31 @@
 "use client";
 
-import { useForm, FormProvider } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import FormInput from "../components/inputs/FormInput";
 
 export default function AdvertisePage() {
-    const methods = useForm();
-    const { register, handleSubmit } = methods;
+    const form = useForm<{
+        title: string;
+        price: number;
+        locationValue: string;
+        roomCount: number;
+        bathroomCount: number;
+        guestCount: number;
+        category: string;
+        description: string;
+    }>();
 
-    const onSubmit = (data: any) => {
-        console.log("Dados do formulário:", data);
-    };
+    const {
+        formState: { errors },
+    } = form;
+
+    function onSubmit(data: any) {
+        console.log(data);
+    }
 
     return (
-        <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)} className="max-w-4xl mx-auto px-4 py-32">
+        <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="max-w-4xl mx-auto px-4 py-32">
                 <h1 className="text-2xl font-bold mb-6">Informações do local</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -29,10 +41,10 @@ export default function AdvertisePage() {
                             Categoria
                         </label>
                         <select
-                            {...register("category")}
+                            {...form.register("category", { required: "Selecione uma categoria" })}
                             id="category"
                             name="category"
-                            className="w-full border border-gray-300 rounded-md px-3 py-2"
+                            className={`w-full border border-gray-300 rounded-md px-3 py-2 ${errors.category ? "border-red-500" : "border-gray-300"}`}
                         >
                             <option value="">Selecione uma categoria</option>
                             <option value="casa">Casa</option>
@@ -41,6 +53,8 @@ export default function AdvertisePage() {
                             <option value="comercial">Comercial</option>
                             <option value="temporada">Temporada</option>
                         </select>
+
+                        {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>}
                     </div>
 
                     <div className="md:col-span-2">
@@ -48,19 +62,26 @@ export default function AdvertisePage() {
                             Descrição
                         </label>
                         <textarea
-                            {...register("description")}
+                            {...form.register("description", {
+                                required: "A descrição é obrigatória",
+                                minLength: {
+                                    value: 10,
+                                    message: "Descrição deve ter no mínimo 10 caracteres",
+                                },
+                            })}
                             id="description"
                             name="description"
                             rows={4}
-                            className="w-full border border-gray-300 rounded-md px-3 py-2"
+                            className={`w-full border rounded-md px-3 py-2 ${errors.description ? "border-red-500" : "border-gray-300"}`}
                             placeholder="Descrição"
                         ></textarea>
+                        {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
                     </div>
                 </div>
 
                 <div className="mt-8">
                     <h2 className="text-xl font-semibold mb-2">Upload de mídia</h2>
-                    <button className="border-2 border-dashed border-gray-400 w-full py-12 text-center text-gray-600 hover:bg-gray-50">
+                    <button type="button" className="border-2 border-dashed border-gray-400 w-full py-12 text-center text-gray-600 hover:bg-gray-50">
                         Selecionar arquivo
                     </button>
                 </div>
