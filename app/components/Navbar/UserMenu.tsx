@@ -2,10 +2,13 @@
 
 import { AiOutlineMenu } from 'react-icons/ai'
 import Avatar from '../Avatar';
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useState } from 'react';
 import MenuItem from './MenuItem';
+
 import useRegisterModal from '@/app/hooks/userRegisterModal';
 import useLoginModal from '@/app/hooks/userLoginModal';
+import useRentModal from '@/app/hooks/userRentModal';
+
 import { signOut } from 'next-auth/react';
 import { SafeUser } from '@/app/types';
 
@@ -19,16 +22,26 @@ const UserMenu: React.FC<UserMenuProps> = ({
 }) => {
     const registerModal = useRegisterModal();
     const loginModal = useLoginModal()
+    const rentModal = useRentModal();
     const [isOpen, setIsOpen] = useState(false);
+
     const toggleOpen = useCallback(() => {
       setIsOpen((value) => !value);  
     }, []);
+
+    const onRent = useCallback(() => {
+      if(!currentUser){
+        return loginModal.onOpen();
+      }
+
+      rentModal.onOpen();
+    }, [currentUser, loginModal, rentModal])
 
     return ( 
         <div className="relative">
             <div className="flex flex-row items-center gap-3">
                 <div
-                    onClick={() => {}}
+                    onClick={onRent}
                     className="
                         hidden
                         md:block
@@ -37,7 +50,9 @@ const UserMenu: React.FC<UserMenuProps> = ({
                         py-3
                         px-4
                         rounded-full
-                        hover:bg-neutral-100
+                        text-blue-900 
+                        hover:bg-blue-900
+                        hover:text-white
                         transition
                         cursor-pointer
                     "
@@ -49,7 +64,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     className="
                         p-4
                         md:py-1
-                        md: px-3
+                        md:px-3
                         border-[1px]
                         border-neutral-200
                         flex
@@ -93,6 +108,10 @@ const UserMenu: React.FC<UserMenuProps> = ({
                             <MenuItem 
                              onClick={() => {}}
                              label="Meus Favoritos"
+                            />
+                            <MenuItem 
+                             onClick={rentModal.onOpen}
+                             label="Anuncie seu Espaço"
                             />
                             <MenuItem 
                              onClick={() => signOut()}
