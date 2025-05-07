@@ -14,6 +14,7 @@ import Counter from "../inputs/Counter";
 import Heading from "../Heading";
 import { categories } from "../Navbar/Categories";
 import dynamic from "next/dynamic";
+import ImageUpload from "../inputs/ImageUpload";
 
 enum STEPS {
   CATEGORY = 0,
@@ -58,6 +59,7 @@ const RentModal = () => {
   const wifiCount = watch("wifiCount");
   const bathroomCount = watch("bathroomCount");
   const acCount = watch("acCount");
+  const imageSrc = watch('imageSrc')
 
   const Map = useMemo(
     () =>
@@ -179,6 +181,21 @@ const RentModal = () => {
         />
       </div>
     );
+  }
+
+  if(step == STEPS.IMAGES){
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Inclua fotos do seu local"
+          subtitle="Mostre o que torna seu espaço único"
+        />
+        <ImageUpload
+          value={imageSrc}
+          onChange={(value) => setCustomValue('imageSrc', value)}
+        />
+      </div>
+    )
   }
 
   return (
