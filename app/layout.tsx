@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar/Navbar"
+import Navbar from "./components/Navbar/Navbar";
 import ClientOnly from "./components/ClientOnly";
 import Modal from "./components/modals/Modal";
 
@@ -31,16 +31,17 @@ export default async function RootLayout({
 
   return (
     <html lang="pt-br">
-      <body
-        className={`${font.variable} antialiased`}>
-          <ClientOnly>
-            <ToasterProvider/>
-            <RentModal/>
-            <LoginModal/>
-            <RegisterModal/>
-            <Navbar currentUser={currentUser ?? undefined} />
-          </ClientOnly>
-        {children}
+      <body className={`${font.variable} antialiased`}>
+        <ClientOnly>
+          <ToasterProvider />
+          <RentModal />
+          <LoginModal />
+          <RegisterModal />
+          <Navbar currentUser={currentUser ?? undefined} />
+        </ClientOnly>
+        <div className="pb-20 pt-28">
+          {children}
+          </div>
       </body>
     </html>
   );
