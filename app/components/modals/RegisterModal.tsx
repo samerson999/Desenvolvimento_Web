@@ -41,6 +41,7 @@ const RegisterModal = () => {
             .then(() => {
                 toast.success('Conta criada com sucesso!');
                 registerModal.onClose();
+                loginModal.onOpen();
             })
             .catch(() => {
                 toast.error('Erro ao cadastrar. Tente novamente!');

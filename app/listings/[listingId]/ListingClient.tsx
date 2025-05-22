@@ -72,7 +72,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
            toast.success('Reserva confirmada'); 
            setDateRange(initialDateRange);
             // redirect to trip
-            router.refresh();
+            router.push('/trips');
         })
         .catch(() => {
             toast.error('Alguma coisa deu errado')
