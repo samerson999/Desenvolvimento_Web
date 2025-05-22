@@ -101,6 +101,10 @@ const UserMenu: React.FC<UserMenuProps> = ({
                     <div className='flex flex-col cursor-pointer'>
                         {currentUser ? (
                             <>
+                            <MenuItem
+                             onClick={() => {}}
+                             label="Minhas Viagens" 
+                            />
                             <MenuItem 
                              onClick={() => {}}
                              label="Minhas Reservas"

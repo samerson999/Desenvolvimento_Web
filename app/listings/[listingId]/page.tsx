@@ -3,14 +3,16 @@ import getListingById from "@/app/actions/getListingById";
 import ClientOnly from "@/app/components/ClientOnly";
 import EmptyState from "@/app/components/EmptyState";
 import ListingClient from "./ListingClient";
+import getReservations from "@/app/actions/getReservations";
 
 interface IParams {
   listingId: string;
 }
 
-// CORRIGIDO: `params` agora é uma Promise
 const ListingPage = async ({ params }: { params: Promise<IParams> }) => {
+
   const { listingId } = await params;
+  const  reservations  = await getReservations(await params)
 
   const listing = await getListingById({ listingId });
   const currentUser = await getCurrentUser();
@@ -27,6 +29,7 @@ const ListingPage = async ({ params }: { params: Promise<IParams> }) => {
     <ClientOnly>
       <ListingClient
         listing={listing}
+        reservations={reservations}
         currentUser={currentUser}
       />
     </ClientOnly>
