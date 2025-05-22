@@ -8,6 +8,7 @@ import Modal from "./components/modals/Modal";
 import RegisterModal from "./components/modals/RegisterModal";
 import LoginModal from "./components/modals/LoginModal";
 import RentModal from "./components/modals/RentModal";
+import SearchModal from "./components/modals/SearchModal"
 
 import ToasterProvider from "./providers/ToasterProvider";
 import getCurrentUser from "./actions/GetCurrentUser";
@@ -34,6 +35,7 @@ export default async function RootLayout({
       <body className={`${font.variable} antialiased`}>
         <ClientOnly>
           <ToasterProvider />
+          <SearchModal/>
           <RentModal />
           <LoginModal />
           <RegisterModal />
