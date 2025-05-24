@@ -75,7 +75,7 @@ const RentModal = () => {
     [location]
   );
 
-  const setCustomValue = (id: string, value: any) => {
+  const setCustomValue = (id: string, value: unknown) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -101,7 +101,7 @@ const RentModal = () => {
     axios.post('/api/listings', data)
     .then(() => {
       toast.success('Espaço Anunciado!');
-      router.refresh;
+      router.refresh();
       reset()
       setStep(STEPS.CATEGORY)
       rentModal.onClose();

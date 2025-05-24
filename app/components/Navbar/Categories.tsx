@@ -2,9 +2,9 @@
 
 import Container from "../Container";
 
-import { FaWarehouse, FaSwimmer, FaFutbol, FaBirthdayCake, FaMusic, FaUtensils, FaParking, FaChurch, FaChalkboardTeacher, FaBuilding } from 'react-icons/fa';
+import { FaWarehouse, FaSwimmer, FaBirthdayCake, FaMusic, FaUtensils, FaParking, FaChurch, FaChalkboardTeacher, FaBuilding } from 'react-icons/fa';
 import { MdSportsBasketball, MdOutlineBusinessCenter, MdFestival } from 'react-icons/md';
-import { GiTheater, GiMicrophone, GiSoccerBall, GiBowlingStrike, GiRunningShoe, GiBalloons, GiOfficeChair } from 'react-icons/gi';
+import { GiSoccerBall, GiBowlingStrike, GiOfficeChair } from 'react-icons/gi';
 
 
 import CategoryBox from "./CategoryBox";

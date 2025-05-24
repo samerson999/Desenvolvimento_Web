@@ -56,13 +56,17 @@ const LoginModal = () => {
   const handleGoogleSignIn = async () => {
     try {
       await signIn("google", { redirect: false });
-    } catch (error: any) {
-      if (error?.message?.includes("OAuthAccountNotLinked")) {
-        toast.error(
-          "Esse e-mail já está vinculado a outro método de login. Use e-mail e senha."
-        );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message.includes("OAuthAccountNotLinked")) {
+          toast.error(
+            "Esse e-mail já está vinculado a outro método de login. Use e-mail e senha."
+          );
+        } else {
+          toast.error("Erro ao tentar login com o Google.");
+        }
       } else {
-        toast.error("Erro ao tentar login com o Google.");
+        toast.error("Erro desconhecido ao tentar login com o Google.");
       }
     }
   };

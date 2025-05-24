@@ -23,7 +23,7 @@ const ptBRCustom: Locale = {
         month: (n: number) =>
           ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][n],
       }
-    : undefined as any,
+    : undefined!,
 };
 
 
