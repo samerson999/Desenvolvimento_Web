@@ -2,13 +2,9 @@ import { NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/GetCurrentUser";
 import prisma from "@/app/libs/prismadb";
 
-interface IParams {
-  reservationId?: string;
-}
-
 export async function DELETE(
   request: Request,
-  { params }: { params: IParams }
+  { params }: { params: { reservationId: string } }
 ) {
   const currentUser = await getCurrentUser();
 
@@ -17,11 +13,7 @@ export async function DELETE(
   }
 
   const { reservationId } = params;
-
-  if (!reservationId || typeof reservationId !== "string") {
-    return NextResponse.json({ error: "Invalid reservation ID" }, { status: 400 });
-  }
-
+  
   try {
     const reservation = await prisma.reservation.deleteMany({
       where: {
