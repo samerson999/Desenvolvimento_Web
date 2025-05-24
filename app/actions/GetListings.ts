@@ -10,6 +10,8 @@ export interface IListingsParams {
     endDate?: string;
     locationValue?: string;
     category?: string;
+    wifiCount?: number;  
+    acCount?: number; 
 }
 
 export default async function getListings(

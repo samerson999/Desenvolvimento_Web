@@ -6,11 +6,24 @@ import EmptyState from "./components/EmptyState";
 import ListingCard from "./components/listings/ListingCard";
 
 interface HomeProps {
-  searchParams: IListingsParams;
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 const Home = async ({ searchParams }: HomeProps) => {
-  const listings = await getListings(searchParams);
+  // Converte searchParams em IListingsParams conforme necessário.
+  const listingsParams: IListingsParams = {
+    category: typeof searchParams.category === 'string' ? searchParams.category : undefined,
+    locationValue: typeof searchParams.locationValue === 'string' ? searchParams.locationValue : undefined,
+    guestCount: searchParams.guestCount ? Number(searchParams.guestCount) : undefined,
+    roomCount: searchParams.roomCount ? Number(searchParams.roomCount) : undefined,
+    bathroomCount: searchParams.bathroomCount ? Number(searchParams.bathroomCount) : undefined,
+    wifiCount: searchParams.wifiCount ? Number(searchParams.wifiCount) : undefined,
+    acCount: searchParams.acCount ? Number(searchParams.acCount) : undefined,
+    startDate: typeof searchParams.startDate === 'string' ? searchParams.startDate : undefined,
+    endDate: typeof searchParams.endDate === 'string' ? searchParams.endDate : undefined,
+  };
+
+  const listings = await getListings(listingsParams);
   const currentUser = await getCurrentUser();
 
   if (listings.length === 0) {
@@ -26,16 +39,16 @@ const Home = async ({ searchParams }: HomeProps) => {
       <Container>
         <div
           className="
-          pt-24
-          grid
-          grid-cols-1
-          sm:grid-cols-2
-          md:grid-cols-3
-          lg:grid-cols-4
-          xl:grid-cols-5
-          2xl:grid-cols-6
-          gap-8
-        "
+            pt-24
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            md:grid-cols-3
+            lg:grid-cols-4
+            xl:grid-cols-5
+            2xl:grid-cols-6
+            gap-8
+          "
         >
           {listings.map((listing) => (
             <ListingCard
