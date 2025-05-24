@@ -1,54 +1,52 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 import prisma from "@/app/libs/prismadb";
-import getCurrentUser from '@/app/actions/GetCurrentUser';
+import getCurrentUser from "@/app/actions/GetCurrentUser";
 
-export async function POST(
-    request: Request
-){
-    const currentUser = await getCurrentUser();
+export async function POST(request: Request) {
+  const currentUser = await getCurrentUser();
 
-    if(!currentUser){
-        return NextResponse.error();
+  if (!currentUser) {
+    return NextResponse.error();
+  }
+
+  const body = await request.json();
+  const {
+    title,
+    description,
+    imageSrc,
+    category,
+    guestCount,
+    roomCount,
+    wifiCount,
+    bathroomCount,
+    acCount,
+    location,
+    price,
+  } = body;
+
+  Object.keys(body).forEach((key: string) => {
+    if (!body[key]) {
+      throw new Error(`O campo ${key} está vazio.`);
     }
+  });
 
-    const body = await request.json();
-    const {
-        title,
-        description,
-        imageSrc,
-        category,
-        guestCount,
-        roomCount,
-        wifiCount,
-        bathroomCount,
-        acCount,
-        location,
-        price
-    } = body
+  const listing = await prisma.listing.create({
+    data: {
+      title,
+      description,
+      imageSrc,
+      category,
+      guestCount,
+      roomCount,
+      wifiCount,
+      bathroomCount,
+      acCount,
+      locationValue: location.value,
+      price: parseInt(price, 10),
+      userId: currentUser.id,
+    },
+  });
 
-    Object.keys(body).forEach((value: any) => {
-      if(!body[value]){
-        NextResponse.error();
-      }  
-    });
-
-    const listing = await prisma.listing.create({
-        data:{
-            title,
-            description,
-            imageSrc,
-            category,
-            guestCount,
-            roomCount,
-            wifiCount,
-            bathroomCount,
-            acCount,
-            locationValue: location.value,
-            price: parseInt(price, 10),
-            userId: currentUser.id
-        }
-    });
-
-    return NextResponse.json(listing)
+  return NextResponse.json(listing);
 }
