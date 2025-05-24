@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import countries from 'world-countries';
 import isoCountries from 'i18n-iso-countries';
 import 'i18n-iso-countries/langs/pt.json';

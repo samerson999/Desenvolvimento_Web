@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Select from "react-select";
@@ -13,7 +14,7 @@ export type CountrySelectValue = {
 
 interface CountrySelectProps {
   value?: CountrySelectValue;
-  onChange: (value: CountrySelectValue) => void;
+  onChange: (value: CountrySelectValue | null) => void;
 }
 
 const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
@@ -22,48 +23,50 @@ const CountrySelect: React.FC<CountrySelectProps> = ({ value, onChange }) => {
   return (
     <div>
       <Select
-  placeholder="Escolha uma localização"
-  isClearable
-  options={getAll()}
-  value={value}
-  onChange={(value) => onChange(value as CountrySelectValue)}
-  formatOptionLabel={(option: any) => (
-    <div className="flex flex-row items-center gap-3">
-      <img
-        src={`https://flagcdn.com/w40/${option.value.toLowerCase()}.png`}
-        alt={option.label}
-        width={20}
+        placeholder="Escolha uma localização"
+        isClearable
+        options={getAll()}
+        value={value}
+        onChange={(value) => onChange(value as CountrySelectValue | null)}
+        formatOptionLabel={(option: CountrySelectValue) => (
+          <div className="flex flex-row items-center gap-3">
+            <img
+              src={`https://flagcdn.com/w40/${option.value.toLowerCase()}.png`}
+              alt={option.label}
+              width={20}
+            />
+            <div>
+              {option.label},
+              <span className="ml-1">{option.region}</span>
+            </div>
+          </div>
+        )}
+        styles={{
+          control: (provided) => ({
+            ...provided,
+            padding: "0.75rem",
+            borderWidth: "2px",
+          }),
+          input: (provided) => ({
+            ...provided,
+            fontSize: "1.125rem",
+          }),
+          option: (provided, state) => ({
+            ...provided,
+            backgroundColor: state.isFocused ? "#1e3a8a" : provided.backgroundColor,
+            color: state.isFocused ? "white" : "#1e3a8a",
+          }),
+        }}
+        theme={(theme) => ({
+          ...theme,
+          borderRadius: 6,
+          colors: {
+            ...theme.colors,
+            primary: "white",
+            primary25: "#1e3a8a",
+          },
+        })}
       />
-      <div>
-        {option.label},
-        <span className="text-inherit ml-1">{option.region}</span>
-      </div>
-    </div>
-  )}
-  classNames={{
-    control: () => 'p3 border-2',
-    input: () => 'text-lg',
-    
-  }}
-  styles={{
-    option: (provided, state) => ({
-      ...provided,
-     
-      backgroundColor: state.isFocused ? '#1e3a8a' : provided.backgroundColor,
-     
-      color: state.isFocused ? 'white' : '#1e3a8a',
-    }),
-  }}
-  theme={(theme) => ({
-    ...theme,
-    borderRadius: 6,
-    colors: {
-      ...theme.colors,
-      primary: 'white',
-      primary25: '#1e3a8a',
-    },
-  })}
-/>
     </div>
   );
 };

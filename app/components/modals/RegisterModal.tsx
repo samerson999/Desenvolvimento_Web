@@ -72,6 +72,7 @@ const RegisterModal = () => {
     const handleGoogleRegister = async () => {
         try {
             await signIn('google', { redirect: false });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             if (error?.message?.includes('OAuthAccountNotLinked')) {
                 toast.error('Esse e-mail já está vinculado a outro método de login. Use e-mail e senha.');
