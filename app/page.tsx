@@ -6,11 +6,11 @@ import EmptyState from "./components/EmptyState";
 import ListingCard from "./components/listings/ListingCard";
 
 interface HomeProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 const Home = async ({ searchParams }: HomeProps) => {
-  const params = searchParams;
+  const params = await searchParams;
 
   const listingsParams: IListingsParams = {
     category: typeof params.category === 'string' ? params.category : undefined,
