@@ -10,7 +10,7 @@ interface HomeProps {
 }
 
 const Home = async ({ searchParams }: HomeProps) => {
-  const params = await searchParams;
+  const params = searchParams;
 
   const listingsParams: IListingsParams = {
     category: typeof params.category === 'string' ? params.category : undefined,
