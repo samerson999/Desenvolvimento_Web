@@ -12,6 +12,8 @@ import SearchModal from "./components/modals/SearchModal"
 import ToasterProvider from "./providers/ToasterProvider";
 import getCurrentUser from "./actions/GetCurrentUser";
 
+export const dynamic = 'force-dynamic';  // 👈 
+
 const font = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],
@@ -42,7 +44,7 @@ export default async function RootLayout({
         </ClientOnly>
         <div className="pb-20 pt-28">
           {children}
-          </div>
+        </div>
       </body>
     </html>
   );
