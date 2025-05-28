@@ -3,6 +3,8 @@
 import { Range } from 'react-date-range';
 import Calendar from '../inputs/calendar';
 import Button from '../Button';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface ListingReservationProps{
     price: number;
@@ -11,7 +13,8 @@ interface ListingReservationProps{
     onChangeDate: (value: Range) => void;
     onSubmit: () => void;
     disabled?: boolean;
-    disabledDates: Date[]
+    disabledDates: Date[];
+    listingId: string;
 }
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
@@ -21,17 +24,46 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     onChangeDate,
     onSubmit,
     disabled,
-    disabledDates
+    disabledDates,
+    listingId
 }) => {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    const handlePayment = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('/api/payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nomeEspaco: listingId,
+                    valor: totalPrice
+                })
+            });
+
+            const data = await response.json();
+            if (data.init_point) {
+                window.location.href = data.init_point;
+            } else {
+                setLoading(false);
+                alert('Erro ao iniciar pagamento');
+            }
+        } catch (error) {
+            setLoading(false);
+            alert('Erro de conexão');
+        }
+    };
+
     return ( 
-        <div
-            className='
-                bg-white
-                rounded-xl
-                border-neutral-200
-                overflow-hidden
-            '
-        >
+        <div className='
+            bg-white
+            rounded-xl
+            border-neutral-200
+            overflow-hidden
+        '>
             <div className='flex flex-row items-center gap-1 p-4'>
                 <div className="text-2xl font-semibold">
                     R${price}
@@ -60,16 +92,15 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
                     Total
                 </div>
                 <div>
-                  R$ {totalPrice}
+                    R$ {totalPrice}
                 </div>
             </div>
             <div className='p-4'>
                 <Button
-                  disable={disabled}  
-                  label="Reservar"
-                  onClick={onSubmit}
+                    disable={disabled || loading}
+                    label={loading ? 'Processando...' : 'Reservar'}
+                    onClick={handlePayment}
                 />
-
             </div>
         </div>
      );
