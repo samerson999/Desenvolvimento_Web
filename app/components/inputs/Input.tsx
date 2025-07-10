@@ -13,6 +13,7 @@ interface InputProps {
   required?: boolean;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
+  validation?: Record<string, unknown>; 
 }
 
 const Input: React.FC<InputProps> = ({
@@ -23,11 +24,11 @@ const Input: React.FC<InputProps> = ({
   formatPrice,
   register,
   required,
-  errors
+  errors,
+  validation = {}
 }) => {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
-  // Define a cor da borda com base no erro ou no foco
   const borderColor = errors[id]
     ? "border-red-500" // Erro: Vermelho
     : focusedInput === id
@@ -45,7 +46,7 @@ const Input: React.FC<InputProps> = ({
       <input
         id={id}
         disabled={disabled}
-        {...register(id, { required })}
+        {...register(id, { required, ...validation })}
         placeholder=" "
         type={type}
         onFocus={() => setFocusedInput(id)}
@@ -86,6 +87,12 @@ const Input: React.FC<InputProps> = ({
       >
         {label}
       </label>
+
+      {errors[id] && (
+        <span className="text-sm text-red-500 mt-1">
+          {errors[id]?.message as string}
+        </span>
+      )}
     </div>
   );
 };
