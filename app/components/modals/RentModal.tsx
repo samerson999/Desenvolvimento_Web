@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect} from "react";
 import useRentModal from "@/app/hooks/userRentModal";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Modal from "./Modal";
@@ -15,7 +15,7 @@ import Input from "../inputs/Input";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Filter } from 'bad-words'; // <-- 1. IMPORTAR O FILTRO AQUI
+import { Filter } from 'bad-words'; 
 
 enum STEPS {
   CATEGORY = 0,
@@ -32,9 +32,8 @@ const RentModal = () => {
 
   const [step, setStep] = useState(STEPS.CATEGORY);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageModerationStatus, setImageModerationStaatus] = useState<'pending' | 'approved' | 'rejected' | null>(null);
 
-  // <-- 2. CONFIGURAR O FILTRO DENTRO DO COMPONENTE
-  // Usamos useMemo para que a lista não seja recriada a cada renderização
   const filter = useMemo(() => {
     const customFilter = new Filter();
     const palavrasInapropriadas = [
@@ -98,12 +97,15 @@ const RentModal = () => {
     [location]
   );
 
-  const setCustomValue = (id: string, value: unknown) => {
+  const setCustomValue = (id: string, value: unknown, status?: 'pending' | 'approved' | 'rejected') => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
     });
+    if(id === 'imageSrc' && status !== undefined){
+      setImageModerationStaatus(status)
+    }
   };
 
   const onBack = () => {
@@ -130,6 +132,14 @@ const RentModal = () => {
   };
   
   const onFinalSubmit: SubmitHandler<FieldValues> = (data) => {
+    if(step === STEPS.IMAGES && imageModerationStatus === 'rejected'){
+      toast.error("Não é possível prosseguir com uma imagem imprópria.");
+      return;
+    }
+
+    if (step !== STEPS.PRICE) {
+      return onNext();
+    }
     setIsLoading(true);
     axios
       .post("/api/listings", data)
@@ -193,7 +203,7 @@ const RentModal = () => {
      bodyContent = (
         <div className="flex flex-col gap-8">
             <Heading title="Inclua fotos do seu local" subtitle="Mostre o que torna seu espaço único" />
-            <ImageUpload value={imageSrc} onChange={(value) => setCustomValue('imageSrc', value)} />
+            <ImageUpload value={imageSrc} onChange={(value, status) => setCustomValue('imageSrc', value, status)} />
             {errors.imageSrc && <p className="text-red-500 text-sm mt-1">{errors.imageSrc.message as string}</p>}
         </div>
     )
